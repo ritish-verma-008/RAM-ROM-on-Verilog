@@ -1,0 +1,48 @@
+`timescale 1ns / 1ps
+
+module dual_port_RAM_tb();
+reg [7:0] data_a, data_b;
+reg clk;           
+reg [5:0] addr_a,addr_b; 
+reg write_a, write_b;    
+wire [7:0] q_a,q_b;  
+
+dual_port_RAM dut (.data_a(data_a),.data_b(data_b),.clk(clk),.addr_a(addr_a),.addr_b(addr_b),.write_a(write_a),.write_b(write_b),.q_a(q_a),.q_b(q_b));
+
+initial begin
+clk=1'b0;
+forever #5 clk=~clk;
+end
+
+initial begin
+write_a=1'b1;
+write_b=1'b1;
+
+data_a=8'h01; // 1
+addr_a=6'd1;
+
+data_b=8'h01; //1
+addr_b=6'd1;
+#10;
+
+data_a=8'h02;//2
+addr_a=6'd2;
+
+data_b=8'h02; //2 
+addr_b=6'd2;
+#10;
+
+write_a=1'b0;
+write_b=1'b0;
+
+addr_a=6'd1;
+addr_b=6'd1;
+#10;
+
+addr_a=6'd2;
+addr_b=6'd2;
+#10;
+
+$finish;
+end
+endmodule
