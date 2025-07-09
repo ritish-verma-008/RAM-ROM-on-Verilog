@@ -1,0 +1,41 @@
+module single_port_RAM(data,addr,write,clk,seg,an);
+input [7:0] data;
+input [5:0] addr;
+input write, clk;
+wire [7:0] q;
+output reg [6:0] seg;
+output reg [7:0] an;
+
+reg [7:0] ram [63:0] ;
+reg [5:0] addr_reg;
+reg [2:0] digit_select;
+reg [19:0] refresh_counter;
+wire bit_val;
+
+always@(posedge clk) begin
+    if(write) begin
+        ram[addr] <= data;
+        end else begin
+        addr_reg <= addr;
+        end
+    end
+assign q = ram[addr_reg];
+
+always @(posedge clk) begin
+    refresh_counter <= refresh_counter + 1;
+    digit_select <= refresh_counter[19:17];
+
+    an <= 8'b11111111;
+    an[digit_select] <= 1'b0;
+end
+
+assign bit_val = q[digit_select];
+
+always @(*) begin
+        case (bit_val)
+            1'b0: seg = 7'b1000000;  // '0'
+            1'b1: seg = 7'b1111001;  // '1'
+            default: seg = 7'b1111111;
+        endcase
+    end
+endmodule
