@@ -1,0 +1,35 @@
+module ROM_4by16 (en,clk,addr,dout);
+input en,clk;
+input [3:0] addr;
+output reg [3:0] dout;
+
+reg [4:0] rom [15:0];
+
+always @ (posedge clk) begin
+    if (en)
+    dout <= rom[addr];
+    else
+    dout <= 4'bxxxx;
+end
+
+initial
+    begin
+    rom[0] = 4'b1100;
+    rom[1] = 4'b1011;
+    rom[2] = 4'b1001;
+    rom[3] = 4'b1000;
+    rom[4] = 4'b1011;
+    rom[5] = 4'b1111;
+    rom[6] = 4'b0111;
+    rom[7] = 4'b0011;
+    rom[8] = 4'b1001;
+    rom[9] = 4'b0001;
+    rom[10] = 4'b1011;    
+    rom[11] = 4'b0010;
+    rom[12] = 4'b0111;
+    rom[13] = 4'b0010;
+    rom[14] = 4'b0111;
+    rom[15] = 4'b1001;
+end  
+
+endmodule  
